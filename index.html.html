@@ -10,6 +10,7 @@
             margin: 50px auto;
             text-align: center;
             background: #f0f4ff;
+            padding: 20px;
         }
         h1 {
             color: #4a6cf7;
@@ -35,9 +36,19 @@
         button:hover {
             background: #3451c7;
         }
+        button:disabled {
+            background: #888;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #555;
+            min-height: 30px;
+        }
         #loading {
             display: none;
-            margin-top: 20px;
+            margin-top: 10px;
             font-size: 18px;
             color: #ff6b35;
         }
@@ -50,56 +61,171 @@
         .footer {
             margin-top: 40px;
             color: #888;
+            font-size: 14px;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+        .info-box {
+            background: #e8edff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: left;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
     <h1>🎬 AI Video Generator</h1>
-    <p>Describe your video in English, then click Generate.</p>
+    <p>Describe any video you want to create:</p>
 
-    <input type="text" id="prompt" placeholder="e.g., A cat walking on the moon">
+    <input type="text" id="prompt" placeholder="e.g., A cat walking on the moon, cinematic style">
     <br>
-    <button onclick="generateVideo()">🚀 Generate Video</button>
+    <button id="generateBtn" onclick="generateVideo()">🚀 Generate Video</button>
 
-    <div id="loading">⏳ Generating... Please wait 1–3 minutes.</div>
+    <div id="status">Ready</div>
+    <div id="loading">⏳ Generating... This takes 1–3 minutes. Please wait.</div>
+    <div id="error" class="error"></div>
+
     <video id="videoPlayer" controls></video>
 
-    <div class="footer">Made with ❤️ using free hosting (GitHub Pages)</div>
+    <div class="info-box">
+        <strong>💡 Note:</strong> This uses a free AI video API. 
+        Generation may take 1-3 minutes. The video will appear here when ready.
+    </div>
+
+    <div class="footer">Made with ❤️ | Free AI Video Generator</div>
 
     <script>
+        // =============================================
+        // 🔴 IMPORTANT: Replace this with YOUR API key
+        // =============================================
+        const API_KEY = 'YOUR_API_KEY_HERE';  // <--- PASTE YOUR API KEY HERE
+
+        // Agnes AI API endpoint
+        const API_URL = 'https://apihub.agnes-ai.com/v1/videos';
+
         async function generateVideo() {
             const prompt = document.getElementById('prompt').value;
-            if (!prompt) {
-                alert('Please describe your video first!');
+            const statusDiv = document.getElementById('status');
+            const loadingDiv = document.getElementById('loading');
+            const errorDiv = document.getElementById('error');
+            const video = document.getElementById('videoPlayer');
+            const btn = document.getElementById('generateBtn');
+
+            // Clear previous results
+            errorDiv.textContent = '';
+            video.style.display = 'none';
+            video.src = '';
+
+            // Check if prompt is empty
+            if (!prompt.trim()) {
+                errorDiv.textContent = '⚠️ Please describe your video first!';
                 return;
             }
 
-            const loading = document.getElementById('loading');
-            const video = document.getElementById('videoPlayer');
+            // Check if API key is set
+            if (API_KEY === 'YOUR_API_KEY_HERE') {
+                errorDiv.textContent = '⚠️ Please set your API key in the code first!';
+                return;
+            }
 
-            loading.style.display = 'block';
-            video.style.display = 'none';
+            // Disable button and show loading
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating...';
+            statusDiv.textContent = '⏳ Submitting request...';
+            loadingDiv.style.display = 'block';
 
             try {
-                // 🔴 IMPORTANT: Yeh sirf ek example hai. 
-                // Real AI API yahan aayegi. Abhi ke liye hum ek dummy video dikha rahe hain.
-                // Baad mein main aapko real API integration sikhunga.
+                // STEP 1: Submit the video generation request
+                statusDiv.textContent = '📤 Submitting your request to AI...';
 
-                // Dummy response (fake video URL)
-                // Asli kaam ke liye hum agle steps mein real AI API lagayenge.
-                const fakeVideoURL = 'https://www.w3schools.com/html/mov_bbb.mp4';
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        prompt: prompt,
+                        duration: 5,  // 5 seconds video
+                        resolution: '720p'
+                    })
+                });
 
-                // Thoda wait karke dikhate hain ke generate ho raha hai
-                await new Promise(resolve => setTimeout(resolve, 3000));
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(`API Error: ${response.status} - ${errorData.message || 'Unknown error'}`);
+                }
 
-                video.src = fakeVideoURL;
-                video.style.display = 'block';
-                loading.style.display = 'none';
+                const data = await response.json();
+                const videoId = data.id || data.video_id;
+
+                if (!videoId) {
+                    throw new Error('No video ID received from API');
+                }
+
+                statusDiv.textContent = '⏳ Video is being generated... This takes 1-3 minutes.';
+
+                // STEP 2: Poll (check) for the video status until it's ready
+                let videoUrl = null;
+                let attempts = 0;
+                const maxAttempts = 40; // 40 checks, 5 seconds apart = ~3.3 minutes max
+
+                while (attempts < maxAttempts) {
+                    attempts++;
+                    await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
+
+                    statusDiv.textContent = `⏳ Generating... (${attempts * 5} seconds elapsed)`;
+
+                    const statusResponse = await fetch(`${API_URL}/${videoId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${API_KEY}`
+                        }
+                    });
+
+                    if (!statusResponse.ok) {
+                        continue; // Try again if status check fails
+                    }
+
+                    const statusData = await statusResponse.json();
+
+                    if (statusData.status === 'completed' || statusData.status === 'done') {
+                        videoUrl = statusData.video_url || statusData.url || statusData.output;
+                        break;
+                    } else if (statusData.status === 'failed' || statusData.status === 'error') {
+                        throw new Error('Video generation failed. Please try again.');
+                    }
+                }
+
+                // STEP 3: Show the video
+                if (videoUrl) {
+                    video.src = videoUrl;
+                    video.style.display = 'block';
+                    statusDiv.textContent = '✅ Video generated successfully! Click play to watch.';
+                    loadingDiv.style.display = 'none';
+
+                    // Auto-play the video
+                    video.addEventListener('loadeddata', () => {
+                        video.play().catch(() => {});
+                    });
+
+                } else {
+                    throw new Error('Timeout: Video took too long to generate. Please try again.');
+                }
 
             } catch (error) {
-                alert('Error: ' + error.message);
-                loading.style.display = 'none';
+                console.error('Error:', error);
+                errorDiv.textContent = `❌ ${error.message}`;
+                statusDiv.textContent = '❌ Generation failed';
+                loadingDiv.style.display = 'none';
+            } finally {
+                // Re-enable the button
+                btn.disabled = false;
+                btn.textContent = '🚀 Generate Video';
             }
         }
     </script>
