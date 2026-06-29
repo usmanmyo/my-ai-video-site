@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>My AI Video Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 50px auto;
+            text-align: center;
+            background: #f0f4ff;
+        }
+        h1 {
+            color: #4a6cf7;
+        }
+        input {
+            width: 80%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #4a6cf7;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        button {
+            background: #4a6cf7;
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            font-size: 18px;
+            border-radius: 8px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #3451c7;
+        }
+        #loading {
+            display: none;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ff6b35;
+        }
+        video {
+            margin-top: 25px;
+            width: 100%;
+            border-radius: 12px;
+            display: none;
+        }
+        .footer {
+            margin-top: 40px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎬 AI Video Generator</h1>
+    <p>Describe your video in English, then click Generate.</p>
+
+    <input type="text" id="prompt" placeholder="e.g., A cat walking on the moon">
+    <br>
+    <button onclick="generateVideo()">🚀 Generate Video</button>
+
+    <div id="loading">⏳ Generating... Please wait 1–3 minutes.</div>
+    <video id="videoPlayer" controls></video>
+
+    <div class="footer">Made with ❤️ using free hosting (GitHub Pages)</div>
+
+    <script>
+        async function generateVideo() {
+            const prompt = document.getElementById('prompt').value;
+            if (!prompt) {
+                alert('Please describe your video first!');
+                return;
+            }
+
+            const loading = document.getElementById('loading');
+            const video = document.getElementById('videoPlayer');
+
+            loading.style.display = 'block';
+            video.style.display = 'none';
+
+            try {
+                // 🔴 IMPORTANT: Yeh sirf ek example hai. 
+                // Real AI API yahan aayegi. Abhi ke liye hum ek dummy video dikha rahe hain.
+                // Baad mein main aapko real API integration sikhunga.
+
+                // Dummy response (fake video URL)
+                // Asli kaam ke liye hum agle steps mein real AI API lagayenge.
+                const fakeVideoURL = 'https://www.w3schools.com/html/mov_bbb.mp4';
+
+                // Thoda wait karke dikhate hain ke generate ho raha hai
+                await new Promise(resolve => setTimeout(resolve, 3000));
+
+                video.src = fakeVideoURL;
+                video.style.display = 'block';
+                loading.style.display = 'none';
+
+            } catch (error) {
+                alert('Error: ' + error.message);
+                loading.style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+</html>
