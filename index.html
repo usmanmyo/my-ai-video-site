@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
     <style>
-        /* RESET & BASE */
         * {
             margin: 0;
             padding: 0;
@@ -28,7 +27,6 @@
                               radial-gradient(circle at 90% 80%, rgba(0, 200, 255, 0.1), transparent 60%);
         }
 
-        /* MAIN CONTAINER */
         .container {
             max-width: 840px;
             width: 100%;
@@ -39,10 +37,8 @@
             border-radius: 40px;
             padding: 48px 40px;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7);
-            transition: all 0.3s ease;
         }
 
-        /* HEADER */
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -75,11 +71,8 @@
             color: #8c8c9e;
             font-size: 17px;
             margin-top: 10px;
-            font-weight: 400;
-            letter-spacing: 0.2px;
         }
 
-        /* INPUT AREA */
         .input-area {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -126,7 +119,6 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             white-space: nowrap;
             font-family: 'Inter', sans-serif;
-            letter-spacing: 0.3px;
         }
 
         .input-area button:hover:not(:disabled) {
@@ -140,7 +132,6 @@
             transform: none;
         }
 
-        /* EXAMPLE CHIPS (Like Kling AI) */
         .examples {
             display: flex;
             flex-wrap: wrap;
@@ -169,7 +160,6 @@
             transform: translateY(-2px);
         }
 
-        /* STATUS & LOADING */
         #status {
             color: #8c8c9e;
             font-size: 14px;
@@ -205,7 +195,6 @@
             font-size: 15px;
         }
 
-        /* ERROR */
         #error {
             color: #f87171;
             text-align: center;
@@ -215,7 +204,6 @@
             min-height: 22px;
         }
 
-        /* VIDEO PLAYER */
         .video-wrapper {
             margin-top: 30px;
             border-radius: 24px;
@@ -223,7 +211,6 @@
             background: #000;
             border: 1px solid rgba(255, 255, 255, 0.05);
             display: none;
-            transition: all 0.4s ease;
         }
 
         .video-wrapper video {
@@ -232,52 +219,43 @@
             vertical-align: middle;
         }
 
-        /* FOOTER */
         .footer {
             margin-top: 32px;
             text-align: center;
             color: #4a4a5a;
             font-size: 13px;
-            font-weight: 400;
         }
 
         .footer span {
             color: #7c3aed;
         }
 
-        /* RESPONSIVE */
         @media (max-width: 600px) {
             .container {
                 padding: 28px 18px;
                 border-radius: 28px;
             }
-
             .header h1 {
                 font-size: 28px;
             }
-
             .input-area {
                 flex-direction: column;
                 background: rgba(255, 255, 255, 0.02);
                 padding: 16px;
             }
-
             .input-area input {
                 width: 100%;
                 text-align: center;
                 padding: 8px 0;
             }
-
             .input-area button {
                 width: 100%;
                 justify-content: center;
                 padding: 14px;
             }
-
             .examples {
                 gap: 8px;
             }
-
             .chip {
                 font-size: 12px;
                 padding: 6px 14px;
@@ -289,61 +267,55 @@
 
 <div class="container">
 
-    <!-- HEADER -->
     <div class="header">
-        <div class="badge">⚡ NEXT-GEN AI</div>
+        <div class="badge">NEXT-GEN AI</div>
         <h1>Create AI Videos</h1>
         <p>Describe your idea, and let AI bring it to life.</p>
     </div>
 
-    <!-- INPUT -->
     <div class="input-area">
-        <input type="text" id="prompt" placeholder='e.g., "A cyberpunk city with neon rain, 4k cinematic"' />
-        <button id="generateBtn" onclick="generateVideo()">✨ Generate</button>
+        <input type="text" id="prompt" placeholder="e.g. A cyberpunk city with neon rain, 4k cinematic" />
+        <button id="generateBtn">Generate</button>
     </div>
 
-    <!-- EXAMPLE CHIPS -->
     <div class="examples">
-        <span class="chip" onclick="setPrompt('A majestic eagle flying over snowy mountains, slow motion, 4k')">🦅 Eagle</span>
-        <span class="chip" onclick="setPrompt('Futuristic city skyline at sunset with flying cars, cinematic')">🌆 Sci-Fi City</span>
-        <span class="chip" onclick="setPrompt('A cute kitten playing with a ball of yarn, cozy lighting')">🐱 Kitten</span>
-        <span class="chip" onclick="setPrompt('Underwater coral reef with colorful fish, nature documentary')">🐠 Underwater</span>
-        <span class="chip" onclick="setPrompt('A knight fighting a dragon in a fantasy forest, epic battle')">⚔️ Fantasy</span>
+        <span class="chip" onclick="setPrompt('A majestic eagle flying over snowy mountains, slow motion, 4k')">Eagle</span>
+        <span class="chip" onclick="setPrompt('Futuristic city skyline at sunset with flying cars, cinematic')">Sci-Fi City</span>
+        <span class="chip" onclick="setPrompt('A cute kitten playing with a ball of yarn, cozy lighting')">Kitten</span>
+        <span class="chip" onclick="setPrompt('Underwater coral reef with colorful fish, nature documentary')">Underwater</span>
+        <span class="chip" onclick="setPrompt('A knight fighting a dragon in a fantasy forest, epic battle')">Fantasy</span>
     </div>
 
-    <!-- STATUS & LOADING -->
     <div id="status">Ready to create</div>
     <div id="error"></div>
 
     <div id="loading">
         <div class="spinner"></div>
-        <p>⏳ Generating your video... (1–3 minutes)</p>
+        <p>Generating your video... (1-3 minutes)</p>
     </div>
 
-    <!-- VIDEO PLAYER -->
     <div class="video-wrapper" id="videoWrapper">
         <video id="videoPlayer" controls></video>
     </div>
 
-    <!-- FOOTER -->
-    <div class="footer">⚡ Powered by <span>AI</span> • Free for everyone</div>
+    <div class="footer">Powered by <span>AI</span> Free for everyone</div>
 </div>
 
 <script>
-    // ============================================================
-    // 🔴 IMPORTANT: Paste your Agnes AI API Key here
-    // ============================================================
-    const API_KEY = 'sk-y9GHJlRNrigMhHgi95TBwT9jb0tVqzdvP7Ljecn9GllTyMN8
+    // ==========================================================
+    // IMPORTANT: Paste your Agnes AI API Key here
+    // ==========================================================
+    const API_KEY = 'sk-y9GHJlRNrigMhHgi95TBwT9jb0tVqzdvP7Ljecn9GllTyMN8';
 
     const API_BASE_URL = 'https://apihub.agnes-ai.com/v1';
-    const VIDEO_MODEL = 'agnes-video-v2.0'; // The correct model name
+    const VIDEO_MODEL = 'agnes-video-v2.0';
 
-    // Helper to set prompt from chips
     function setPrompt(text) {
         document.getElementById('prompt').value = text;
     }
 
-    // Main Generate Function
+    document.getElementById('generateBtn').addEventListener('click', generateVideo);
+
     async function generateVideo() {
         const prompt = document.getElementById('prompt').value;
         const statusDiv = document.getElementById('status');
@@ -353,113 +325,95 @@
         const video = document.getElementById('videoPlayer');
         const btn = document.getElementById('generateBtn');
 
-        // Reset
         errorDiv.textContent = '';
         videoWrapper.style.display = 'none';
         video.src = '';
 
-        // Validate
         if (!prompt.trim()) {
-            errorDiv.textContent = '⚠️ Please describe your video.';
+            errorDiv.textContent = 'Please describe your video.';
             return;
         }
 
         if (API_KEY === 'YOUR_API_KEY_HERE') {
-            errorDiv.textContent = '⚠️ Set your API key in the code first!';
+            errorDiv.textContent = 'Set your API key in the code first!';
             return;
         }
 
-        // UI States
         btn.disabled = true;
-        btn.textContent = '⏳ Creating...';
-        statusDiv.textContent = '📤 Submitting request...';
+        btn.textContent = 'Creating...';
+        statusDiv.textContent = 'Submitting request...';
         loadingDiv.style.display = 'block';
 
         try {
-            // Step 1: Submit the video generation task
-            const response = await fetch(`${API_BASE_URL}/videos`, {
+            const response = await fetch(API_BASE_URL + '/videos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${API_KEY}`
+                    'Authorization': 'Bearer ' + API_KEY
                 },
                 body: JSON.stringify({
-                    model: VIDEO_MODEL, // <-- This is REQUIRED
-                    prompt: prompt,
-                    // Optional: You can add more parameters like height, width, etc.
-                    // height: 768,
-                    // width: 1152,
+                    model: VIDEO_MODEL,
+                    prompt: prompt
                 })
             });
 
             if (!response.ok) {
                 const errData = await response.json().catch(() => ({}));
-                throw new Error(`API Error (${response.status}): ${errData.message || 'Unknown error'}`);
+                throw new Error('API Error (' + response.status + '): ' + (errData.message || 'Unknown error'));
             }
 
             const data = await response.json();
-            // The API returns a video_id
             const videoId = data.video_id || data.id;
 
-            if (!videoId) throw new Error('No video ID received from the API.');
+            if (!videoId) throw new Error('No video ID received.');
 
-            // Step 2: Poll for the video status
-            statusDiv.textContent = '⏳ AI is crafting your video... (takes 1-3 min)';
+            statusDiv.textContent = 'AI is crafting your video... (takes 1-3 min)';
             let videoUrl = null;
             let attempts = 0;
-            const maxAttempts = 40; // ~3.3 minutes max
+            const maxAttempts = 40;
 
             while (attempts < maxAttempts) {
                 attempts++;
-                await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
+                await new Promise(resolve => setTimeout(resolve, 5000));
 
-                statusDiv.textContent = `⏳ Generating... (${attempts * 5}s elapsed)`;
+                statusDiv.textContent = 'Generating... (' + (attempts * 5) + 's elapsed)';
 
-                // Use the correct polling endpoint from the documentation
-                const statusRes = await fetch(`${API_BASE_URL}/agnesapi?video_id=${videoId}`, {
-                    headers: { 'Authorization': `Bearer ${API_KEY}` }
+                const statusRes = await fetch(API_BASE_URL + '/agnesapi?video_id=' + videoId, {
+                    headers: { 'Authorization': 'Bearer ' + API_KEY }
                 });
 
-                if (!statusRes.ok) {
-                    // If the status check fails, we can try the legacy endpoint as a fallback
-                    // But let's just continue to the next attempt
-                    continue;
-                }
+                if (!statusRes.ok) continue;
 
                 const statusData = await statusRes.json();
 
-                // Check the status
                 if (statusData.status === 'completed' || statusData.status === 'done' || statusData.status === 'succeeded') {
                     videoUrl = statusData.video_url || statusData.url || statusData.output;
                     break;
                 } else if (statusData.status === 'failed' || statusData.status === 'error') {
-                    throw new Error(`Generation failed: ${statusData.message || 'Unknown reason'}`);
+                    throw new Error('Generation failed: ' + (statusData.message || 'Unknown reason'));
                 }
-                // If status is 'processing' or 'queued', we continue polling
             }
 
-            // Step 3: Show the video
             if (videoUrl) {
                 video.src = videoUrl;
                 videoWrapper.style.display = 'block';
-                statusDiv.textContent = '✅ Video ready! Hit play.';
+                statusDiv.textContent = 'Video ready! Hit play.';
                 loadingDiv.style.display = 'none';
-
-                video.addEventListener('loadeddata', () => {
-                    video.play().catch(() => {});
+                video.addEventListener('loadeddata', function() {
+                    video.play().catch(function() {});
                 });
             } else {
-                throw new Error('Timeout: The video took too long to generate. Please try again.');
+                throw new Error('Timeout. Please try again.');
             }
 
         } catch (error) {
-            console.error('Generation Error:', error);
-            errorDiv.textContent = `❌ ${error.message}`;
-            statusDiv.textContent = '❌ Generation failed';
+            console.error('Error:', error);
+            errorDiv.textContent = error.message;
+            statusDiv.textContent = 'Generation failed';
             loadingDiv.style.display = 'none';
         } finally {
             btn.disabled = false;
-            btn.textContent = '✨ Generate';
+            btn.textContent = 'Generate';
         }
     }
 </script>
