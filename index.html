@@ -345,6 +345,7 @@
         loadingDiv.style.display = 'block';
 
         try {
+            // Step 1: Submit the video generation request
             const response = await fetch(API_BASE_URL + '/videos', {
                 method: 'POST',
                 headers: {
@@ -367,6 +368,7 @@
 
             if (!videoId) throw new Error('No video ID received.');
 
+            // Step 2: Poll for the video status
             statusDiv.textContent = 'AI is crafting your video... (takes 1-3 min)';
             let videoUrl = null;
             let attempts = 0;
@@ -394,6 +396,7 @@
                 }
             }
 
+            // Step 3: Display the video
             if (videoUrl) {
                 video.src = videoUrl;
                 videoWrapper.style.display = 'block';
